@@ -10,14 +10,7 @@ int main(void)
     input2 = input1;
     input3 = input1; 
     
-    // declare arrays and variables
     int totaldigits = 0; 
-    int secondlastdigits[totaldigits / 2];
-    int multiplieddigits[totaldigits / 2];
-    int multipliedsum[totaldigits / 2];
-    int nonsecondlastdigits[totaldigits - totaldigits / 2];
-    int nonmultipliedsum[totaldigits - totaldigits / 2];
-    int sum1, sum2, totalsum;
     
     // count number of digits
     while (input3 > 0)
@@ -25,6 +18,13 @@ int main(void)
         input3 /= 10;
         totaldigits++;
     }
+    
+int secondlastdigits[totaldigits / 2];
+int multiplieddigits[totaldigits / 2];
+int multipliedsum[totaldigits / 2];
+int nonsecondlastdigits[totaldigits - totaldigits / 2];
+int nonmultipliedsum[totaldigits - totaldigits / 2];
+int sum1, sum2, totalsum;
     
     // check for valid number of digits
     if ((totaldigits !=  13) && (totaldigits != 15) && (totaldigits != 16))
@@ -47,7 +47,7 @@ int main(void)
             if (i != 0)
             {
                 multipliedsum[0] = multiplieddigits[0] / 10 + multiplieddigits[0] % 10;
-                multipliedsum[i] = multiplieddigits[i] + multipliedsum[i - 1];  
+                multipliedsum[i] = multiplieddigits[i] / 10 + multiplieddigits[i] % 100 + multipliedsum[i - 1]; 
                 sum1 = multipliedsum[i];
             }
         }
@@ -109,7 +109,7 @@ int main(void)
                 {
                     printf("VISA\n");
                 }
-                if (secondlastdigits[7] == 5)
+                else if (secondlastdigits[7] == 5)
                 {
                     if ((nonsecondlastdigits[7] == 1) || (nonsecondlastdigits[7] == 2) || (nonsecondlastdigits[7] == 3) || (nonsecondlastdigits[7] == 4) || (nonsecondlastdigits[7] ==5))
                         {
@@ -121,9 +121,9 @@ int main(void)
                         }
                 }
                 else 
-                        {
-                            invalid();
-                        }
+                    {
+                        invalid();
+                    }
             }
         }
         else
