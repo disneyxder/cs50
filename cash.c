@@ -10,11 +10,15 @@ int main(void)
         change = get_float("Change owed: $");
     }
     while (change < 0);
+
+    // variables
     int cents = round(change * 100);
     int quarter = cents / 25;
     int dime = cents % 25 / 10;
     int nickel = cents % 25 % 10 / 5;
     int penny = cents % 25 % 10 % 5 / 1;
+
+    // print coins needed
     printf("Number of quarters: %i\n", quarter);
     printf("Number of dimes: %i\n", dime);
     printf("Number of nickels: %i\n", nickel);
