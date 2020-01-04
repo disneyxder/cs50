@@ -4,24 +4,17 @@
 
 int main(void)
 {
-    float change;
+    float dollars;
     do
     {
-        change = get_float("Change owed: $");
+        dollars = get_float("Change owed: $");
     }
-    while (change < 0);
-
-    // variables
-    int cents = round(change * 100);
-    int quarter = cents / 25;
-    int dime = cents % 25 / 10;
-    int nickel = cents % 25 % 10 / 5;
-    int penny = cents % 25 % 10 % 5 / 1;
-
-    // print coins needed
-    printf("Number of quarters: %i\n", quarter);
-    printf("Number of dimes: %i\n", dime);
-    printf("Number of nickels: %i\n", nickel);
-    printf("Number of pennies: %i\n", penny);
-    printf("Minimum number of coins: %i\n", quarter + dime + nickel + penny);
+    while (dollars < 0);
+    int cents = round(dollars * 100);
+    int quarters, dimes, nickels, pennies;
+    quarters = cents / 25;
+    dimes = (cents % 25) / 10;
+    nickels = ((cents % 25) % 10) / 5;
+    pennies = ((cents % 25) % 10) % 5;
+    printf("%i\n", quarters + dimes + nickels + pennies);
 }
