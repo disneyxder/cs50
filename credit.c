@@ -1,114 +1,119 @@
 #include <cs50.h>
 #include <stdio.h>
-
-void invalid(void);
+#include <ctype.h>
+#include <math.h>
 
 int main(void)
 {
-    long input, cc1, cc2, cc3;
-    input = get_long("Number: ");
-    cc1 = input;
-    cc2 = input;
-    cc3 = input;
-
-    int count = 0;
-    while (cc1 > 0)
+    // declare variables
+    long input, ccno1, ccno2, ccno3; 
+    int count, checksum1, checksum2, checksum; 
+    
+    input = get_long("Number: "); 
+    ccno1 = input; 
+    ccno2 = input; 
+    ccno3 = input; 
+    
+    // count digits
+    count = 0;
+    while (input > 0)
     {
-        count++;
-        cc1 /= 10;
+        count++; 
+        input /= 10; 
     }
-
     if (count != 13 && count != 15 && count != 16)
     {
-        invalid();
+        printf("INVALID\n");
+        return 0; 
     }
-    else
+    
+    // declare arrays 
+    int second[count/2], multsecond[count/2], nonsecond[count-count/2]; 
+    
+    // checksum1
+    checksum1 = 0; 
+    for (int i = 0; i < count/2; i++)
     {
-        int countsecond = count / 2, countnonsecond = count - count / 2, sum1, sum2;
-        int seconddigit[countsecond], nonseconddigit[countnonsecond], doubleseconddigit[countsecond], multipliedsum[countsecond],
-            nonmultipliedsum[countnonsecond];
-        for (int i = 0; i < countsecond; i++)
+        second[i] = ccno1 % 100 / 10; 
+        ccno1 /= 100; 
+        multsecond[i] = second[i] * 2; 
+        checksum1+= multsecond[i] % 10 + multsecond[i] / 10; 
+    }
+    
+    // checksum2
+    checksum2 = 0; 
+    for (int j = 0; j < count-count/2; j++)
+    {
+        nonsecond[j] = ccno2 % 10; 
+        ccno2 /= 100; 
+        checksum2 += nonsecond[j];
+    }
+    
+    // checksum
+    checksum = checksum1 + checksum2; 
+    if (checksum % 10 != 0)
+    {
+        printf("INVALID\n");
+        return 0; 
+    }
+    else 
+    {
+        // VISA
+        if (count == 13)
         {
-            seconddigit[i] = (cc2 % 100) / 10;
-            cc2 /= 100;
-            doubleseconddigit[i] = seconddigit[i] * 2;
-            if (i != 0)
+            ccno3 /= pow(10, 12);
+            if (ccno3 == 4)
             {
-                multipliedsum[0] = doubleseconddigit[0] / 10 + doubleseconddigit[0] % 10;
-                multipliedsum[i] = multipliedsum[i - 1] + doubleseconddigit[i] / 10 + doubleseconddigit[i] % 10;
-                sum1 = multipliedsum[i];
+                printf("VISA\n");
+                return 0; 
+            }
+            else 
+            {
+                printf("INVALID\n"); 
+                return 0; 
             }
         }
-        for (int j = 0; j < countnonsecond; j++)
+        
+        // AMEX
+        if (count == 15)
         {
-            nonseconddigit[j] = (cc3 % 10);
-            cc3 /= 100;
-            if (j != 0)
+            ccno3 /= pow(10, 13);
+            if (ccno3 == 34 || ccno3 == 37)
             {
-                nonmultipliedsum[0] = nonseconddigit[0];
-                nonmultipliedsum[j] = nonseconddigit[j] + nonmultipliedsum[j - 1];
-                sum2 = nonmultipliedsum[j];
+                printf("AMEX\n");
+                return 0; 
+            }
+            else
+            {
+                printf("INVALID\n");
+                return 0; 
             }
         }
-        if ((sum1 + sum2) % 10 != 0)
+        
+        // MASTERCARD or VISA
+        if (count == 16)
         {
-            invalid();
-        }
-        else
-        {
-            if (count == 13)
+            ccno3 /= pow(10, 14);
+            
+            // MASTERCARD
+            if (ccno3 == 51 || ccno3 == 52 || ccno3 == 53 || ccno3 == 54 || ccno3 == 55)
             {
-                if (nonseconddigit[6] == 4)
-                {
-                    printf("VISA\n");
-                }
-                else
-                {
-                    invalid();
-                }
+                printf("MASTERCARD\n");
+                return 0; 
             }
-            if (count == 15)
+            
+            //VISA 
+            if (ccno3/10 == 4)
             {
-                if (nonseconddigit[7] == 3)
-                {
-                    if (seconddigit[6] == 4 || seconddigit[6] == 7)
-                    {
-                        printf("AMEX\n");
-                    }
-                    else
-                    {
-                        invalid();
-                    }
-                }
+                printf("VISA\n");
+                return 0;
             }
-            if (count == 16)
+            
+            else
             {
-                if (seconddigit[7] == 4)
-                {
-                    printf("VISA\n");
-                }
-                else if (seconddigit[7] == 5)
-                {
-                    if (nonseconddigit[7] == 1 || nonseconddigit[7] == 2 || nonseconddigit[7] == 3 || nonseconddigit[7] == 4 ||
-                        nonseconddigit[7] == 5)
-                    {
-                        printf("MASTERCARD\n");
-                    }
-                    else
-                    {
-                        invalid();
-                    }
-                }
-                else
-                {
-                    invalid();
-                }
+                printf("INVALID\n");
+                return 0; 
             }
         }
     }
-}
-
-void invalid(void)
-{
-    printf("INVALID\n");
 }
